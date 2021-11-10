@@ -1,4 +1,4 @@
 {
   "trailingSlash": false,
-  "rewrites": [{ "source": "/api/films", "destination": "/films" }]
+  "rewrites": [{ "source": "/films", "destination": "/api/films" }]
 }
