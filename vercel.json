@@ -1,4 +1,7 @@
 {
   "trailingSlash": false,
-  "rewrites": [{ "source": "/:route*", "destination": "/api/:route*" }]
+  "rewrites": [
+    { "source": "/", "destination": "/api" },
+    { "source": "/films", "destination": "/api/films" }
+  ]
 }
