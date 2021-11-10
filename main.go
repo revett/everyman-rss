@@ -16,6 +16,7 @@ const (
 
 func main() {
 	r := mux.NewRouter()
+	r.HandleFunc("/", handler.Index)
 	r.HandleFunc("/films", handler.Films)
 	http.Handle("/", r)
 
