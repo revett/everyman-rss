@@ -33,6 +33,7 @@ func Films(w http.ResponseWriter, r *http.Request) {
 			"unable to request films from everyman cinema api",
 			http.StatusInternalServerError,
 		)
+		return
 	}
 
 	for _, film := range films {
@@ -55,6 +56,7 @@ func Films(w http.ResponseWriter, r *http.Request) {
 					"unable to calculate image length for rss item",
 					http.StatusInternalServerError,
 				)
+				return
 			}
 
 			i.Enclosure = &feeds.Enclosure{
@@ -71,6 +73,7 @@ func Films(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "unable to generate rss feed", http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)
