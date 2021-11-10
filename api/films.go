@@ -41,7 +41,7 @@ func Films(w http.ResponseWriter, r *http.Request) {
 		i := &feeds.Item{
 			Id:          strconv.Itoa(film.ID),
 			Title:       film.Title,
-			Description: film.Teaser,
+			Description: film.Description(),
 			Link: &feeds.Link{
 				Href: film.URL(),
 			},
@@ -78,6 +78,7 @@ func Films(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Cache-Control", cacheControl)
+	w.Header().Set("Content-Type", "application/rss+xml")
 
 	fmt.Fprint(w, rss)
 }
