@@ -37,6 +37,20 @@ type FilmMediaItems struct {
 
 const baseWebURL = "https://www.everymancinema.com"
 
+// Description generates a text description for the film, with an image URL
+// appended to the end if one is present. The description is in HTML.
+func (f Film) Description() string {
+	d := f.Synopsis
+
+	if !f.HasImage() {
+		return d
+	}
+
+	return fmt.Sprintf(
+		`%s - <img src="%s" />`, d, f.Image(),
+	)
+}
+
 // HasImage checks if the film has an image.
 func (f Film) HasImage() bool {
 	return f.Img != "" || f.MediaItems.QuadStill != ""
@@ -96,9 +110,9 @@ func (f Film) ImageMIMEType() string {
 
 	switch ext {
 	case ".jpg":
-		return "image/jpg"
+		return "image/jpeg"
 	case ".jpeg":
-		return "image/jpg"
+		return "image/jpeg"
 	case ".png":
 		return "image/png"
 	}
