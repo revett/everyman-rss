@@ -16,3 +16,6 @@
 
 # Local TODO list that I keep for the project
 TODO.md
+
+# Binary, built with `make run`
+everyman-rss
