@@ -14,6 +14,9 @@ import (
 	"github.com/revett/everyman-rss/pkg/everyman"
 )
 
+// See: https://vercel.com/docs/concepts/edge-network/caching#stale-while-revalidate
+const cacheControl = "s-maxage=300, stale-while-revalidate=3600"
+
 // Films serves an RSS feed of the latest film releases from Everyman Cinema.
 func Films(w http.ResponseWriter, r *http.Request) {
 	f := feeds.Feed{
@@ -56,5 +59,7 @@ func Films(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Cache-Control", cacheControl)
+
 	fmt.Fprint(w, rss)
 }
