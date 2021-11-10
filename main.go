@@ -50,7 +50,7 @@ func filmsHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		http.Error(
 			w,
-			"unable to request films from Everyman Cinema API",
+			"unable to request films from everyman cinema api",
 			http.StatusInternalServerError,
 		)
 	}
