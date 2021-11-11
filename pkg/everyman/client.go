@@ -38,7 +38,6 @@ func (c client) Films() ([]Film, error) {
 	}
 	defer r.Body.Close()
 
-	// Read body
 	b, err := io.ReadAll(r.Body)
 	if err != nil {
 		return nil, err
