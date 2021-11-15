@@ -35,8 +35,6 @@ type FilmMediaItems struct {
 	OneSheet       string `json:"OneSheet"`
 }
 
-const baseWebURL = "https://www.everymancinema.com"
-
 // Description generates a text description for the film, with an image URL
 // appended to the end if one is present. The description is in HTML.
 func (f Film) Description() string {
@@ -122,5 +120,5 @@ func (f Film) ImageMIMEType() string {
 
 // URL generates the webpage URL for the film.
 func (f Film) URL() string {
-	return fmt.Sprintf("%s/film-info/%s", baseWebURL, f.FriendlyName)
+	return fmt.Sprintf("%s/film-info/%s", BaseWebURL, f.FriendlyName)
 }
