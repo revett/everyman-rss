@@ -8,9 +8,11 @@ import (
 )
 
 // Client is the interface which defines the methods available for interacting
-// with the API.
+// with the Everyman Cinema API.
 type Client interface {
+	Cinemas() ([]Cinema, error)
 	Films() ([]Film, error)
+	FilmsByCinema(cinemaID int) ([]Film, error)
 }
 
 type client struct {
@@ -18,37 +20,62 @@ type client struct {
 	httpClient *http.Client
 }
 
-const baseAPIURL = "https://movieeverymanapi.peachdigital.com"
-
 // NewClient creates a new Client.
 func NewClient() Client {
 	return client{
-		baseURL:    baseAPIURL,
+		baseURL:    BaseAPIURL,
 		httpClient: http.DefaultClient,
 	}
 }
 
+// Films implements the Client.Cinemas interface.
+func (c client) Cinemas() ([]Cinema, error) {
+	url := fmt.Sprintf("%s/%s", BaseWebURL, "cinemas")
+
+	cinemas := []Cinema{}
+	err := c.execute(url, &cinemas)
+	if err != nil {
+		return nil, err
+	}
+
+	return cinemas, nil
+}
+
 // Films implements the Client.Films interface.
 func (c client) Films() ([]Film, error) {
-	url := fmt.Sprintf("%s/%s", c.baseURL, "movies/13/7925")
+	// TODO: this is limiting film search to a single cinema
+	return c.FilmsByCinema(7925)
+}
 
-	r, err := c.httpClient.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	defer r.Body.Close()
-
-	b, err := io.ReadAll(r.Body)
-	if err != nil {
-		return nil, err
-	}
+// Films implements the Client.FilmsByCinema interface.
+func (c client) FilmsByCinema(cinemaID int) ([]Film, error) {
+	url := fmt.Sprintf("%s/movies/13/%d", c.baseURL, cinemaID)
 
 	films := []Film{}
-
-	err = json.Unmarshal(b, &films)
+	err := c.execute(url, &films)
 	if err != nil {
 		return nil, err
 	}
 
 	return films, nil
+}
+
+func (c client) execute(url string, v interface{}) error {
+	r, err := c.httpClient.Get(url)
+	if err != nil {
+		return err
+	}
+	defer r.Body.Close()
+
+	b, err := io.ReadAll(r.Body)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(b, v)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
