@@ -7,10 +7,18 @@ package handler
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/revett/everyman-rss/internal/api"
 )
 
-// Index serves a plaintext string to this repo.
+// Index serves a plaintext string with a link to the Github repo.
 func Index(w http.ResponseWriter, r *http.Request) {
+	api.CommonMiddleware(index).ServeHTTP(w, r)
+}
+
+func index(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w, "Read about the project: https://github.com/revett/everyman-rss")
+	fmt.Fprint(
+		w, "Read about the project: https://github.com/revett/everyman-rss",
+	)
 }
