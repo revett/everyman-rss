@@ -1,0 +1,5 @@
+generate:
+  - client
+  - types
+output: client.gen.go
+package: everyman
