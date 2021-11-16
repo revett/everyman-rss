@@ -18,7 +18,7 @@ func ConvertEverymanFilmToFeedItem(f everyman.Film) *feeds.Item {
 			`<img src="%s" /><br><br>%s`, f.MediaItems.QuadStill, f.Synopsis,
 		),
 		Link: &feeds.Link{
-			Href: fmt.Sprintf("%s/film-info/%s", everyman.BaseWebURL, f.FriendlyName),
+			Href: f.URL(),
 		},
 	}
 }
