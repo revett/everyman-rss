@@ -11,8 +11,11 @@ import (
 	"github.com/revett/everyman-rss/pkg/everyman"
 )
 
-// See: https://vercel.com/docs/concepts/edge-network/caching#stale-while-revalidate
-const cacheControl = "s-maxage=300, stale-while-revalidate=3600"
+const (
+	// See: https://vercel.com/docs/concepts/edge-network/caching#stale-while-revalidate
+	cacheControl     = "s-maxage=300, stale-while-revalidate=3600"
+	cinemaQueryParam = "cinema"
+)
 
 // Films serves an RSS XML feed of the latest film releases from Everyman
 // Cinema.
@@ -21,6 +24,48 @@ func Films(w http.ResponseWriter, r *http.Request) {
 }
 
 func films(w http.ResponseWriter, r *http.Request) {
+	if !r.URL.Query().Has(cinemaQueryParam) {
+		err := fmt.Errorf("request must have '%s' query param", cinemaQueryParam)
+		api.BadRequest(
+			w, err, err.Error(),
+		)
+		return
+	}
+
+	cinemaSlug := r.URL.Query().Get(cinemaQueryParam)
+
+	cinemaClient, err := everyman.NewClientWithResponses(everyman.BaseWebURL)
+	if err != nil {
+		api.InternalServerError(
+			w, err, "unable to create everyman api client",
+		)
+		return
+	}
+
+	cinemas, err := cinemaClient.CinemasWithResponse(context.TODO())
+	if err != nil {
+		api.InternalServerError(
+			w, err, "unable to request cinemas from everyman cinema api",
+		)
+		return
+	}
+
+	var cinemaID int
+	for _, cinema := range *cinemas.JSON200 {
+		if cinema.Slug() == cinemaSlug {
+			cinemaID = cinema.CinemaId
+			break
+		}
+	}
+
+	if cinemaID == 0 {
+		err := fmt.Errorf("cinema '%s' does not exist", cinemaSlug)
+		api.BadRequest(
+			w, err, err.Error(),
+		)
+		return
+	}
+
 	f := feeds.Feed{
 		Title:       "Everyman Cinema - Films",
 		Description: "Latest film releases for Everyman Cinema",
@@ -37,7 +82,7 @@ func films(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	films, err := c.FilmsWithResponse(context.TODO(), 7925)
+	films, err := c.FilmsWithResponse(context.TODO(), cinemaID)
 	if err != nil {
 		api.InternalServerError(
 			w, err, "unable to request films from everyman cinema api",
