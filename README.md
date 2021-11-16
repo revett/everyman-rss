@@ -1,6 +1,6 @@
 # Everyman RSS
 
-RSS feeds for Everyman Cinema film releases.
+RSS feeds for [Everyman Cinema](https://www.everymancinema.com) film releases.
 
 ## Why?
 
