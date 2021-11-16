@@ -1,0 +1,255 @@
+openapi: 3.1.0
+info:
+  title: Everyman Cinema API
+  description: Information about Everyman Cinema films and cinemas
+  version: 0.1.0
+servers:
+  - url: https://www.everymancinema.com
+    description: Cinemas endpoint
+  - url: https://movieeverymanapi.peachdigital.com
+    description: Films endpoint
+
+paths:
+  /cinemas:
+    get:
+      summary: Everyman cinemas in the UK
+      operationId: Cinemas
+      responses:
+        "200":
+          description: A JSON array of cinemas
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items:
+                  $ref: "#/components/schemas/Cinema"
+
+  /movies/13/{cinemaID}:
+    get:
+      summary: Latest films for a specific Everyman cinema
+      operationId: Films
+      parameters:
+        - in: path
+          name: cinemaID
+          description: Numeric ID of the cinema
+          schema:
+            type: integer
+            default: 7925
+          example: 7925
+          required: true
+      responses:
+        "200":
+          description: A JSON array of films
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items:
+                  $ref: "#/components/schemas/Film"
+
+components:
+  schemas:
+    Cinema:
+      type: object
+      required:
+        - CinemaId
+        - CinemaName
+      properties:
+        CinemaId:
+          type: integer
+          example: 262
+        CinemaName:
+          type: string
+          example: King's Cross
+        CinemaUrl:
+          type: string
+          format: nullable
+        CinemaFilmUrl:
+          type: string
+          format: nullable
+
+    Film:
+      type: object
+      required:
+        - Cast
+        - Cert
+        - Director
+        - Experiences
+        - FilmId
+        - FriendlyName
+        - MediaItems
+        - Order
+        - ReleaseDate
+        - RunTime
+        - Sessions
+        - Synopsis
+        - Teaser
+        - Title
+      properties:
+        Cast:
+          type: string
+          example: Stellan Skarsgård, Rebecca Ferguson, Timothée Chalamet
+        Cert:
+          type: string
+          example: 12A
+        Director:
+          type: string
+          example: Denis Villeneuve
+        Experiences:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/FilmExperience"
+        FilmId:
+          type: integer
+          example: 39878
+        FriendlyName:
+          type: string
+          example: dune
+        Img:
+          type: string
+          example: http://images.mymovies.net/images/film/cin/350x522/fid20292.jpg
+        MediaItems:
+          type: object
+          $ref: "#/components/schemas/FilmMediaItems"
+        Order:
+          type: integer
+          example: 4
+        ReleaseDate:
+          type: string
+          example: 2021-10-22T00:00:00
+        RunTime:
+          type: string
+          example: 156
+        Sessions:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/FilmSession"
+        Synopsis:
+          type: string
+          example: <p>Oscar nominee Denis Villeneuve (&quot;Arrival&quot; &quot;Blade Runner 2049&quot;) directs Warner Bros. Pictures and Legendary Pictures&#39; &quot;Dune&quot; the big-screen adaptation of Frank Herbert&#39;s seminal bestseller of the same name. A mythic and emotionally charged hero&#39;s journey &quot;Dune&quot; tells the story of Paul Atreides a brilliant and gifted young man born into a great destiny beyond his understanding who must travel to the most dangerous planet in the universe to ensure the future of his family and his people. As malevolent forces explode into conflict over the planet&#39;s exclusive supply of the most precious resource in existence - a commodity capable of unlocking humanity&#39;s greatest potential - only those who can conquer their fear will survive.</p>
+        Teaser:
+          type: string
+          example: Dune tells the story of Paul Atreides a brilliant and gifted young man born into a great destiny beyond his understanding who must travel to the most dangerous planet in the universe to ensure the future of his family and his people.
+        Title:
+          type: string
+          example: Dune
+        Trailer:
+          type: string
+          example: filmId=39878&fid=20292&mid=19834&mtid=trl&fti=Dune&mti=Dune+-+Trailer+2&pid=EVERYMAN
+
+    FilmExperience:
+      type: object
+      required:
+        - Description
+        - ExternalId
+        - Id
+        - Name
+      properties:
+        Description:
+          type: string
+          example: Baby Club
+        ExternalId:
+          type: string
+          example: Baby Club
+        Id:
+          type: string
+          example: 81
+        Name:
+          type: string
+          example: Baby Club
+
+    FilmMediaItems:
+      type: object
+      required:
+        - QuadStill
+      properties:
+        OneSheet:
+          type: string
+          example: http://images.mymovies.net/images/film/cin/350x522/fid20292.jpg
+        QuadStill:
+          type: string
+          example: http://images.mymovies.net/images/film/cin/stills/531x329/fid20292/1.jpg
+        Trailer:
+          type: string
+          example: filmId=39878&fid=20292&mid=19176&mtid=trl&fti=Dune&mti=Dune+-+Trailer&pid=EVERYMAN
+        YouTubeTrailer:
+          type: string
+          example: 20292|19834|trl|Dune|Dune+-+Trailer+2
+
+    FilmSession:
+      type: object
+      required:
+        - ActualDate
+        - ActualDisplayDate
+        - Date
+        - DisplayDate
+        - FirstSession
+        - NewDate
+        - Times
+      properties:
+        ActualDate:
+          type: string
+          example: 2021-11-16T00:00:00
+        ActualDisplayDate:
+          type: string
+          example: Tuesday November 16
+        Date:
+          type: string
+          example: 2021-11-16T00:00:00
+        DisplayDate:
+          type: string
+          example: Tuesday November 16
+        FirstSession:
+          type: string
+          example: 2021-11-16T15:45:00
+        NewDate:
+          type: string
+          format: date
+          example: 2021-11-16
+        Times:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/FilmSessionTime"
+
+    FilmSessionTime:
+      type: object
+      required:
+        - CinemaId
+        - CinemaName
+        - Experience
+        - Scheduleid
+        - Screen
+        - SessionExpired
+        - SoldOut
+        - StartTime
+      properties:
+        definitions:
+          CinemaId:
+            type: integer
+            example: 7922
+          CinemaName:
+            type: string
+            example: Manchester
+          Experience:
+            type: array
+            uniqueItems: true
+            items:
+              $ref: "#/components/schemas/FilmExperience"
+          Scheduleid:
+            type: string
+            example: 8645097
+          Screen:
+            type: string
+            example: Screen 3
+          SessionExpired:
+            type: boolean
+          SoldOut:
+            type: boolean
+          StartTime:
+            type: string
+            example: 3:45 PM
