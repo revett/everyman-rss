@@ -1,7 +1,9 @@
 {
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/", "destination": "/api" },
-    { "source": "/films", "destination": "/api/films" }
+    {
+      "source": "/films",
+      "destination": "/api/films"
+    }
   ]
 }
