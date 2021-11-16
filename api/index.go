@@ -17,11 +17,10 @@ import (
 
 var (
 	//go:embed template/readme.tmpl.md
-	readmeMarkdown string // nolint:gochecknoglobals
+	readmeMarkdown string
 
 	//go:embed template/index.tmpl
-	tmpl string // nolint:gochecknoglobals
-
+	tmpl string
 )
 
 //go:generate cp ../README.md template/readme.tmpl.md
