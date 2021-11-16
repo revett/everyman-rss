@@ -13,15 +13,15 @@ import (
 )
 
 //go:embed template/index.tmpl
-var foo string
+var tmpl string
 
-// Index serves a plaintext string with a link to the Github repo.
+// Index serves a simple HTML page explaining the project.
 func Index(w http.ResponseWriter, r *http.Request) {
 	api.CommonMiddleware(index).ServeHTTP(w, r)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	t, err := template.New("index").Parse(foo)
+	t, err := template.New("index").Parse(tmpl)
 	if err != nil {
 		api.InternalServerError(
 			w, err, "failed to parse local template film",
