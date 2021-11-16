@@ -27,8 +27,6 @@ func main() {
 		ReadTimeout:  timeout * time.Second,
 	}
 
-	log.Println(addr)
-
 	log.Fatal(
 		srv.ListenAndServe(),
 	)
