@@ -1,20 +1,26 @@
 package handler
 
 import (
+	"context"
 	"fmt"
-	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/feeds"
+	"github.com/revett/everyman-rss/internal/api"
+	"github.com/revett/everyman-rss/internal/service"
 	"github.com/revett/everyman-rss/pkg/everyman"
 )
 
 // See: https://vercel.com/docs/concepts/edge-network/caching#stale-while-revalidate
 const cacheControl = "s-maxage=300, stale-while-revalidate=3600"
 
-// Films serves an RSS feed of the latest film releases from Everyman Cinema.
+// Films serves an RSS XML feed of the latest film releases from Everyman
+// Cinema.
 func Films(w http.ResponseWriter, r *http.Request) {
+	api.CommonMiddleware(films).ServeHTTP(w, r)
+}
+
+func films(w http.ResponseWriter, r *http.Request) {
 	f := feeds.Feed{
 		Title:       "Everyman Cinema - Films",
 		Description: "Latest film releases for Everyman Cinema",
@@ -23,56 +29,33 @@ func Films(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	c := everyman.NewClient()
-
-	films, err := c.Films()
+	c, err := everyman.NewClientWithResponses(everyman.BaseAPIURL)
 	if err != nil {
-		log.Println(err)
-		http.Error(
-			w,
-			"unable to request films from everyman cinema api",
-			http.StatusInternalServerError,
+		api.InternalServerError(
+			w, err, "unable to create everyman api client",
 		)
 		return
 	}
 
-	for _, film := range films {
-		// TODO: move to function for FilmToItem
-		i := &feeds.Item{
-			Id:          strconv.Itoa(film.ID),
-			Title:       film.Title,
-			Description: film.Description(),
-			Link: &feeds.Link{
-				Href: film.URL(),
-			},
-		}
+	films, err := c.FilmsWithResponse(context.TODO(), 7925)
+	if err != nil {
+		api.InternalServerError(
+			w, err, "unable to request films from everyman cinema api",
+		)
+		return
+	}
 
-		if film.HasImage() {
-			length, err := film.ImageLength()
-			if err != nil {
-				log.Println(err)
-				http.Error(
-					w,
-					"unable to calculate image length for rss item",
-					http.StatusInternalServerError,
-				)
-				return
-			}
-
-			i.Enclosure = &feeds.Enclosure{
-				Url:    film.Image(),
-				Type:   film.ImageMIMEType(),
-				Length: strconv.FormatInt(length, 10),
-			}
-		}
-
-		f.Add(i)
+	for _, film := range *films.JSON200 {
+		f.Add(
+			service.ConvertEverymanFilmToFeedItem(film),
+		)
 	}
 
 	rss, err := f.ToRss()
 	if err != nil {
-		log.Println(err)
-		http.Error(w, "unable to generate rss feed", http.StatusInternalServerError)
+		api.InternalServerError(
+			w, err, "unable to generate rss feed",
+		)
 		return
 	}
 
