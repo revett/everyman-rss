@@ -39,6 +39,30 @@
       Read about the project:
       <a href="https://github.com/revett/everyman-rss">github.com/revett/everyman-rss</a>
     </p>
+
+    <h2>Cinemas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Cinema</th>
+          <th>RSS Feed</th>
+        </tr>
+      </thead>
+      <tbody>
+      {{range .}}
+        <tr>
+          <td>
+            <a href="https://www.everymancinema.com/{{.Slug}}">{{.Name}}</a>
+          </td>
+          <td>
+            <a href="https://everyman-rss.vercel.app/films?cinema={{.Slug}}">
+              https://everyman-rss.vercel.app/films?cinema={{.Slug}}
+            </a>
+          </td>
+        </tr>
+      {{end}}
+      </tbody>
+    </table>
   </article>
 </body>
 </html>
