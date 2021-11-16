@@ -24,15 +24,15 @@ func Films(w http.ResponseWriter, r *http.Request) {
 }
 
 func films(w http.ResponseWriter, r *http.Request) {
-	if !r.URL.Query().Has(cinemaQueryParam) {
+	cinemaSlug := r.URL.Query().Get(cinemaQueryParam)
+
+	if cinemaSlug == "" {
 		err := fmt.Errorf("request must have '%s' query param", cinemaQueryParam)
 		api.BadRequest(
 			w, err, err.Error(),
 		)
 		return
 	}
-
-	cinemaSlug := r.URL.Query().Get(cinemaQueryParam)
 
 	cinemaClient, err := everyman.NewClientWithResponses(everyman.BaseWebURL)
 	if err != nil {
