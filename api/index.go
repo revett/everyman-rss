@@ -12,10 +12,22 @@ import (
 
 	"github.com/revett/everyman-rss/internal/api"
 	"github.com/revett/everyman-rss/pkg/everyman"
+	"github.com/russross/blackfriday/v2"
 )
 
-//go:embed template/index.tmpl
-var tmpl string
+var (
+	//go:embed template/index.tmpl
+	tmpl string
+
+	//go:embed template/readme.tmpl.md
+	readmeMarkdown string
+)
+
+//go:generate cp ../README.md template/readme.tmpl.md
+type templateData struct {
+	README  string
+	Cinemas []templateCinemaValues
+}
 
 type templateCinemaValues struct {
 	Name string
@@ -44,10 +56,17 @@ func index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var templateData []templateCinemaValues
+	td := templateData{
+		README: string(
+			blackfriday.Run(
+				[]byte(readmeMarkdown),
+			),
+		),
+	}
+
 	for _, cinema := range *cinemas.JSON200 {
-		templateData = append(
-			templateData,
+		td.Cinemas = append(
+			td.Cinemas,
 			templateCinemaValues{
 				Name: cinema.CinemaName,
 				Slug: cinema.Slug(),
@@ -63,7 +82,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = t.Execute(w, templateData)
+	err = t.Execute(w, td)
 	if err != nil {
 		api.InternalServerError(
 			w, err, "failed when generating template for page",
