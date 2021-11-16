@@ -16,11 +16,11 @@ import (
 )
 
 var (
-	//go:embed template/index.tmpl
-	tmpl string
-
 	//go:embed template/readme.tmpl.md
 	readmeMarkdown string
+
+	//go:embed template/index.tmpl
+	tmpl string
 )
 
 //go:generate cp ../README.md template/readme.tmpl.md
@@ -45,6 +45,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		api.InternalServerError(
 			w, err, "unable to create everyman api client",
 		)
+
 		return
 	}
 
@@ -53,6 +54,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		api.InternalServerError(
 			w, err, "unable to request cinemas from everyman cinema api",
 		)
+
 		return
 	}
 
@@ -79,6 +81,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		api.InternalServerError(
 			w, err, "failed to parse local template film",
 		)
+
 		return
 	}
 
@@ -87,6 +90,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 		api.InternalServerError(
 			w, err, "failed when generating template for page",
 		)
+
 		return
 	}
 

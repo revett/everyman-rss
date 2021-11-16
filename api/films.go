@@ -23,7 +23,7 @@ func Films(w http.ResponseWriter, r *http.Request) {
 	api.CommonMiddleware(films).ServeHTTP(w, r)
 }
 
-func films(w http.ResponseWriter, r *http.Request) {
+func films(w http.ResponseWriter, r *http.Request) { // nolint:funlen
 	cinemaSlug := r.URL.Query().Get(cinemaQueryParam)
 
 	if cinemaSlug == "" {
@@ -31,6 +31,7 @@ func films(w http.ResponseWriter, r *http.Request) {
 		api.BadRequest(
 			w, err, err.Error(),
 		)
+
 		return
 	}
 
@@ -39,6 +40,7 @@ func films(w http.ResponseWriter, r *http.Request) {
 		api.InternalServerError(
 			w, err, "unable to create everyman api client",
 		)
+
 		return
 	}
 
@@ -47,13 +49,16 @@ func films(w http.ResponseWriter, r *http.Request) {
 		api.InternalServerError(
 			w, err, "unable to request cinemas from everyman cinema api",
 		)
+
 		return
 	}
 
 	var cinemaID int
+
 	for _, cinema := range *cinemas.JSON200 {
 		if cinema.Slug() == cinemaSlug {
 			cinemaID = cinema.CinemaId
+
 			break
 		}
 	}
@@ -63,15 +68,8 @@ func films(w http.ResponseWriter, r *http.Request) {
 		api.BadRequest(
 			w, err, err.Error(),
 		)
-		return
-	}
 
-	f := feeds.Feed{
-		Title:       "Everyman Cinema - Films",
-		Description: "Latest film releases for Everyman Cinema",
-		Link: &feeds.Link{
-			Href: "https://www.everymancinema.com/film-listings",
-		},
+		return
 	}
 
 	c, err := everyman.NewClientWithResponses(everyman.BaseAPIURL)
@@ -79,6 +77,7 @@ func films(w http.ResponseWriter, r *http.Request) {
 		api.InternalServerError(
 			w, err, "unable to create everyman api client",
 		)
+
 		return
 	}
 
@@ -87,20 +86,16 @@ func films(w http.ResponseWriter, r *http.Request) {
 		api.InternalServerError(
 			w, err, "unable to request films from everyman cinema api",
 		)
+
 		return
 	}
 
-	for _, film := range *films.JSON200 {
-		f.Add(
-			service.ConvertEverymanFilmToFeedItem(film),
-		)
-	}
-
-	rss, err := f.ToRss()
+	feed, err := generateFeed(*films.JSON200)
 	if err != nil {
 		api.InternalServerError(
 			w, err, "unable to generate rss feed",
 		)
+
 		return
 	}
 
@@ -108,5 +103,28 @@ func films(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Cache-Control", cacheControl)
 	w.Header().Set("Content-Type", "application/rss+xml")
 
-	fmt.Fprint(w, rss)
+	fmt.Fprint(w, feed)
+}
+
+func generateFeed(films []everyman.Film) (string, error) {
+	f := feeds.Feed{
+		Title:       "Everyman Cinema - Films",
+		Description: "Latest film releases for Everyman Cinema",
+		Link: &feeds.Link{
+			Href: "https://www.everymancinema.com/film-listings",
+		},
+	}
+
+	for _, film := range films {
+		f.Add(
+			service.ConvertEverymanFilmToFeedItem(film),
+		)
+	}
+
+	rss, err := f.ToRss()
+	if err != nil {
+		return "", fmt.Errorf("failed to generate rss feed: %w", err)
+	}
+
+	return rss, nil
 }

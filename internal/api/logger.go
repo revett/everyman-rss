@@ -11,5 +11,6 @@ type combinedLogger struct{}
 // messages are formatted correctly.
 func (c combinedLogger) Write(p []byte) (n int, err error) {
 	log.Printf("INF %s", string(p))
+
 	return len(p), nil
 }

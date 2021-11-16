@@ -1,0 +1,15 @@
+issues:
+  exclude-use-default: false
+linters:
+  disable:
+    - exhaustivestruct
+    - goerr113
+    - golint
+    - interfacer
+    - maligned
+    - scopelint
+    - varnamelen
+  enable-all: true
+run:
+  concurrency: 4
+  timeout: 30s

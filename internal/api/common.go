@@ -11,6 +11,7 @@ import (
 // handlers.
 func CommonMiddleware(h http.HandlerFunc) http.Handler {
 	loggingHandler := handlers.CombinedLoggingHandler(combinedLogger{}, h)
+
 	return handlers.RecoveryHandler(
 		handlers.PrintRecoveryStack(true),
 		handlers.RecoveryLogger(recoveryHandlerLogger{}),
