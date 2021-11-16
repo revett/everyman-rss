@@ -22,7 +22,8 @@ You can get a feed of all new films for a specific Everyman Cinema:
 https://everyman-rss.vercel.app/films?cinema=broadgate
 ```
 
-See a list of all available cinemas [below](#cinemas).
+See a list of all available cinemas
+[below](https://everyman-rss.vercel.app/#cinemas).
 
 ### Caching
 
