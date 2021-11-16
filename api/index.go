@@ -5,20 +5,38 @@
 package handler
 
 import (
-	"fmt"
+	_ "embed"
 	"net/http"
+	"text/template"
 
 	"github.com/revett/everyman-rss/internal/api"
 )
 
-// Index serves a plaintext string with a link to the Github repo.
+//go:embed template/index.tmpl
+var tmpl string
+
+// Index serves a simple HTML page explaining the project.
 func Index(w http.ResponseWriter, r *http.Request) {
 	api.CommonMiddleware(index).ServeHTTP(w, r)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
+	t, err := template.New("index").Parse(tmpl)
+	if err != nil {
+		api.InternalServerError(
+			w, err, "failed to parse local template film",
+		)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(
-		w, "Read about the project: https://github.com/revett/everyman-rss",
-	)
+
+	err = t.Execute(w, nil)
+	if err != nil {
+		api.InternalServerError(
+			w, err, "failed when generating template for page",
+		)
+		return
+	}
 }
