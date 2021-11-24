@@ -10,15 +10,15 @@ import (
 
 // ConvertEverymanFilmToFeedItem converts an everyman.Film type to an RSS
 // feeds.Item type.
-func ConvertEverymanFilmToFeedItem(f everyman.Film) *feeds.Item {
+func ConvertEverymanFilmToFeedItem(film everyman.Film) *feeds.Item {
 	return &feeds.Item{
-		Id:    strconv.Itoa(f.FilmId),
-		Title: f.Title,
+		Id:    strconv.Itoa(film.FilmId),
+		Title: film.Title,
 		Description: fmt.Sprintf(
-			`<img src="%s" /><br><br>%s`, f.MediaItems.QuadStill, f.Synopsis,
+			`<img src="%s" /><br><br>%s`, film.MediaItems.QuadStill, film.Synopsis,
 		),
 		Link: &feeds.Link{
-			Href: f.URL(),
+			Href: film.URL(),
 		},
 	}
 }
