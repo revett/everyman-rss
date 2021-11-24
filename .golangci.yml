@@ -16,6 +16,7 @@ linters-settings:
   wrapcheck:
     ignoreSigs:
       - .Blob(
+      - .HTML(
       - .NewHTTPError(
 run:
   concurrency: 4
