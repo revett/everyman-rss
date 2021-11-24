@@ -19,7 +19,7 @@ func main() {
 	log.Logger = commonLog.New()
 	log.Info().Msg(addr)
 
-	r := mux.NewRouter()
+	r := mux.NewRouter() // nolint:varnamelen
 	r.HandleFunc("/", handler.Index)
 	r.HandleFunc("/films", handler.Films)
 	http.Handle("/", r)
