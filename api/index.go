@@ -5,13 +5,18 @@
 package handler
 
 import (
+	"bytes"
 	"context"
 	_ "embed"
 	"net/http"
 	"text/template"
 
-	"github.com/revett/everyman-rss/internal/api"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	commonLog "github.com/revett/common/log"
+	commonMiddleware "github.com/revett/common/middleware"
 	"github.com/revett/everyman-rss/pkg/everyman"
+	"github.com/rs/zerolog/log"
 	"github.com/russross/blackfriday/v2"
 )
 
@@ -36,26 +41,31 @@ type templateCinemaValues struct {
 
 // Index serves a simple HTML page explaining the project.
 func Index(w http.ResponseWriter, r *http.Request) {
-	api.CommonMiddleware(index).ServeHTTP(w, r)
+	log.Logger = commonLog.New()
+
+	e := echo.New()
+	e.Use(commonMiddleware.LoggerUsingZerolog(log.Logger))
+	e.Use(middleware.Recover())
+	e.Use(middleware.RequestID())
+
+	e.GET("/", indexHandler)
+	e.ServeHTTP(w, r)
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
+func indexHandler(ctx echo.Context) error {
 	c, err := everyman.NewClientWithResponses(everyman.BaseWebURL)
 	if err != nil {
-		api.InternalServerError(
-			w, err, "unable to create everyman api client",
+		return echo.NewHTTPError(
+			http.StatusInternalServerError, "unable to create everyman api client",
 		)
-
-		return
 	}
 
 	cinemas, err := c.CinemasWithResponse(context.TODO())
 	if err != nil {
-		api.InternalServerError(
-			w, err, "unable to request cinemas from everyman cinema api",
+		return echo.NewHTTPError(
+			http.StatusInternalServerError,
+			"unable to request cinemas from everyman cinema api",
 		)
-
-		return
 	}
 
 	td := templateData{
@@ -78,22 +88,18 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.New("index").Parse(tmpl)
 	if err != nil {
-		api.InternalServerError(
-			w, err, "failed to parse local template film",
+		return echo.NewHTTPError(
+			http.StatusInternalServerError, "failed to parse local template film",
 		)
-
-		return
 	}
 
-	err = t.Execute(w, td)
+	var buf bytes.Buffer
+	err = t.Execute(&buf, td)
 	if err != nil {
-		api.InternalServerError(
-			w, err, "failed when generating template for page",
+		return echo.NewHTTPError(
+			http.StatusInternalServerError, "failed when generating page template",
 		)
-
-		return
 	}
 
-	w.Header().Set("Content-Type", "text/html")
-	w.WriteHeader(http.StatusOK)
+	return ctx.HTML(http.StatusOK, buf.String())
 }

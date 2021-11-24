@@ -7,9 +7,17 @@ linters:
     - golint
     - interfacer
     - maligned
+    - nlreturn
     - scopelint
     - varnamelen
+    - wsl
   enable-all: true
+linters-settings:
+  wrapcheck:
+    ignoreSigs:
+      - .Blob(
+      - .HTML(
+      - .NewHTTPError(
 run:
   concurrency: 4
   timeout: 30s

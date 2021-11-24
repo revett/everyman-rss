@@ -1,12 +1,13 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/gorilla/mux"
+	commonLog "github.com/revett/common/log"
 	handler "github.com/revett/everyman-rss/api"
+	"github.com/rs/zerolog/log"
 )
 
 const (
@@ -15,6 +16,9 @@ const (
 )
 
 func main() {
+	log.Logger = commonLog.New()
+	log.Info().Msg(addr)
+
 	r := mux.NewRouter()
 	r.HandleFunc("/", handler.Index)
 	r.HandleFunc("/films", handler.Films)
@@ -27,7 +31,7 @@ func main() {
 		ReadTimeout:  timeout * time.Second,
 	}
 
-	log.Fatal(
-		srv.ListenAndServe(),
-	)
+	if err := srv.ListenAndServe(); err != nil {
+		log.Fatal().Err(err).Send()
+	}
 }
