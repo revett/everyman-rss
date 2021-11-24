@@ -5,7 +5,6 @@ go 1.17
 require (
 	github.com/deepmap/oapi-codegen v1.9.0
 	github.com/gorilla/feeds v1.1.1
-	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.0
 	github.com/gosimple/slug v1.11.2
 	github.com/labstack/echo/v4 v4.6.1
@@ -15,7 +14,6 @@ require (
 )
 
 require (
-	github.com/felixge/httpsnoop v1.0.2 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/labstack/gommon v0.3.1 // indirect
