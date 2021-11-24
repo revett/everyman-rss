@@ -22,10 +22,10 @@ const (
 
 // Films serves an RSS XML feed of the latest film releases from Everyman
 // Cinema.
-func Films(w http.ResponseWriter, r *http.Request) {
+func Films(w http.ResponseWriter, r *http.Request) { // nolint:varnamelen
 	log.Logger = commonLog.New()
 
-	e := echo.New()
+	e := echo.New() // nolint:varnamelen
 	e.Use(commonMiddleware.LoggerUsingZerolog(log.Logger))
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
@@ -41,14 +41,14 @@ func filmsHandler(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, m)
 	}
 
-	cinemaClient, err := everyman.NewClientWithResponses(everyman.BaseWebURL)
+	cinemasClient, err := everyman.NewClientWithResponses(everyman.BaseWebURL)
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError, "unable to create everyman api client",
 		)
 	}
 
-	cinemas, err := cinemaClient.CinemasWithResponse(context.TODO())
+	cinemas, err := cinemasClient.CinemasWithResponse(context.TODO())
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError,
@@ -56,28 +56,28 @@ func filmsHandler(ctx echo.Context) error {
 		)
 	}
 
-	var cinemaID int
+	var cinema everyman.Cinema
 
-	for _, cinema := range *cinemas.JSON200 {
-		if cinema.Slug() == cinemaSlug {
-			cinemaID = cinema.CinemaId
+	for _, c := range *cinemas.JSON200 {
+		if c.Slug() == cinemaSlug {
+			cinema = c
 			break
 		}
 	}
 
-	if cinemaID == 0 {
+	if cinema.CinemaId == 0 {
 		m := fmt.Sprintf("cinema '%s' does not exist", cinemaSlug)
 		return echo.NewHTTPError(http.StatusBadRequest, m)
 	}
 
-	c, err := everyman.NewClientWithResponses(everyman.BaseAPIURL)
+	filmsClient, err := everyman.NewClientWithResponses(everyman.BaseAPIURL)
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError, "unable to create everyman api client",
 		)
 	}
 
-	films, err := c.FilmsWithResponse(context.TODO(), cinemaID)
+	films, err := filmsClient.FilmsWithResponse(context.TODO(), cinema.CinemaId)
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError,
@@ -85,7 +85,7 @@ func filmsHandler(ctx echo.Context) error {
 		)
 	}
 
-	feed, err := generateFeed(*films.JSON200)
+	feed, err := generateFeed(cinema, *films.JSON200)
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError, "unable to generate rss feed",
@@ -96,22 +96,22 @@ func filmsHandler(ctx echo.Context) error {
 	return ctx.Blob(http.StatusOK, "application/xml", []byte(feed))
 }
 
-func generateFeed(films []everyman.Film) (string, error) {
-	f := feeds.Feed{
-		Title:       "Everyman Cinema - Films",
-		Description: "Latest film releases for Everyman Cinema",
+func generateFeed(cinema everyman.Cinema, films []everyman.Film) (string, error) {
+	feed := feeds.Feed{
+		Title: fmt.Sprintf("Everyman Cinema %s - Films", cinema.CinemaName),
+		Description: fmt.Sprintf(
+			"Latest film releases for Everyman Cinema %s.", cinema.CinemaName,
+		),
 		Link: &feeds.Link{
-			Href: "https://www.everymancinema.com/film-listings",
+			Href: cinema.URL(),
 		},
 	}
 
 	for _, film := range films {
-		f.Add(
-			service.ConvertEverymanFilmToFeedItem(film),
-		)
+		feed.Add(service.ConvertEverymanFilmToFeedItem(film))
 	}
 
-	rss, err := f.ToRss()
+	rss, err := feed.ToRss()
 	if err != nil {
 		return "", fmt.Errorf("failed to generate rss feed: %w", err) // nolint:wrapcheck
 	}

@@ -25,7 +25,7 @@ var (
 	readmeMarkdown string
 
 	//go:embed template/index.tmpl
-	tmpl string
+	indexTemplate string
 )
 
 //go:generate cp ../README.md template/readme.tmpl.md
@@ -40,10 +40,10 @@ type templateCinemaValues struct {
 }
 
 // Index serves a simple HTML page explaining the project.
-func Index(w http.ResponseWriter, r *http.Request) {
+func Index(w http.ResponseWriter, r *http.Request) { // nolint:varnamelen
 	log.Logger = commonLog.New()
 
-	e := echo.New()
+	e := echo.New() // nolint:varnamelen
 	e.Use(commonMiddleware.LoggerUsingZerolog(log.Logger))
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
@@ -53,14 +53,14 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func indexHandler(ctx echo.Context) error {
-	c, err := everyman.NewClientWithResponses(everyman.BaseWebURL)
+	client, err := everyman.NewClientWithResponses(everyman.BaseWebURL)
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError, "unable to create everyman api client",
 		)
 	}
 
-	cinemas, err := c.CinemasWithResponse(context.TODO())
+	cinemas, err := client.CinemasWithResponse(context.TODO())
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError,
@@ -68,7 +68,7 @@ func indexHandler(ctx echo.Context) error {
 		)
 	}
 
-	td := templateData{
+	templateData := templateData{
 		README: string(
 			blackfriday.Run(
 				[]byte(readmeMarkdown),
@@ -77,8 +77,8 @@ func indexHandler(ctx echo.Context) error {
 	}
 
 	for _, cinema := range *cinemas.JSON200 {
-		td.Cinemas = append(
-			td.Cinemas,
+		templateData.Cinemas = append(
+			templateData.Cinemas,
 			templateCinemaValues{
 				Name: cinema.CinemaName,
 				Slug: cinema.Slug(),
@@ -86,7 +86,7 @@ func indexHandler(ctx echo.Context) error {
 		)
 	}
 
-	t, err := template.New("index").Parse(tmpl)
+	tmpl, err := template.New("index").Parse(indexTemplate)
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError, "failed to parse local template film",
@@ -94,7 +94,7 @@ func indexHandler(ctx echo.Context) error {
 	}
 
 	var buf bytes.Buffer
-	err = t.Execute(&buf, td)
+	err = tmpl.Execute(&buf, templateData)
 	if err != nil {
 		return echo.NewHTTPError(
 			http.StatusInternalServerError, "failed when generating page template",
