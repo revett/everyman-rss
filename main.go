@@ -6,7 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	commonLog "github.com/revett/common/log"
-	handler "github.com/revett/everyman-rss/api"
+	"github.com/revett/everyman-rss/api"
 	"github.com/rs/zerolog/log"
 )
 
@@ -20,8 +20,8 @@ func main() {
 	log.Info().Msg(addr)
 
 	r := mux.NewRouter() // nolint:varnamelen
-	r.HandleFunc("/", handler.Index)
-	r.HandleFunc("/films", handler.Films)
+	r.HandleFunc("/", api.Index)
+	r.HandleFunc("/films", api.Films)
 	http.Handle("/", r)
 
 	srv := &http.Server{
