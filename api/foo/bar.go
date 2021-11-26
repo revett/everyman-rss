@@ -19,7 +19,7 @@ func Index(w http.ResponseWriter, r *http.Request) { // nolint:varnamelen
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
 
-	e.GET("/foo/bar", indexHandler)
+	e.GET("/*", indexHandler)
 	e.ServeHTTP(w, r)
 }
 
