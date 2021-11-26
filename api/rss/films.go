@@ -1,4 +1,7 @@
-package handler
+// Package rss provides HTTP handlers for RSS XML endpoints which Vercel will
+// convert to serverless functions using the Go runtime.
+// Note this cannot be within doc.go as Vercel sees that file as an endpoint.
+package rss
 
 import (
 	"context"
@@ -30,7 +33,7 @@ func Films(w http.ResponseWriter, r *http.Request) { // nolint:varnamelen
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
 
-	e.GET("/films", filmsHandler)
+	e.GET("/*", filmsHandler)
 	e.ServeHTTP(w, r)
 }
 
