@@ -8,6 +8,10 @@
     {
       "source": "/films",
       "destination": "/api/films"
+    },
+    {
+      "source": "/foo/bar",
+      "destination": "/api/foo/bar"
     }
   ]
 }
