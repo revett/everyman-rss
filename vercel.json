@@ -3,11 +3,11 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/api"
+      "destination": "/api/html"
     },
     {
       "source": "/films",
-      "destination": "/api/films"
+      "destination": "/api/rss/films"
     }
   ]
 }

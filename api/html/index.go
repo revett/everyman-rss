@@ -1,8 +1,7 @@
-// Package handler (within directory called `api`) is a pattern that is enforced
-// by Vercel for serverless functions using the Go runtime.
-// See: https://vercel.com/docs/runtimes#official-runtimes/go
+// Package html provides HTTP handlers for HTML endpoints which Vercel will
+// convert to serverless functions using the Go runtime.
 // Note this cannot be within doc.go as Vercel sees that file as an endpoint.
-package api
+package html
 
 import (
 	"bytes"
@@ -21,14 +20,14 @@ import (
 )
 
 var (
-	//go:embed template/readme.tmpl.md
+	//go:embed template/README.gen.md
 	readmeMarkdown string
 
 	//go:embed template/index.tmpl
 	indexTemplate string
 )
 
-//go:generate cp ../README.md template/readme.tmpl.md
+//go:generate cp ../../README.md template/README.gen.md
 type templateData struct {
 	README  string
 	Cinemas []templateCinemaValues

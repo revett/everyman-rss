@@ -1,4 +1,7 @@
-package api
+// Package rss provides HTTP handlers for RSS XML endpoints which Vercel will
+// convert to serverless functions using the Go runtime.
+// Note this cannot be within doc.go as Vercel sees that file as an endpoint.
+package rss
 
 import (
 	"context"
