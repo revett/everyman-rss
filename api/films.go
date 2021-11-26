@@ -1,4 +1,4 @@
-package handler
+package api
 
 import (
 	"context"
@@ -30,7 +30,7 @@ func Films(w http.ResponseWriter, r *http.Request) { // nolint:varnamelen
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
 
-	e.GET("/films", filmsHandler)
+	e.GET("/*", filmsHandler)
 	e.ServeHTTP(w, r)
 }
 

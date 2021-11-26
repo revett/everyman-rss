@@ -2,7 +2,7 @@
 // by Vercel for serverless functions using the Go runtime.
 // See: https://vercel.com/docs/runtimes#official-runtimes/go
 // Note this cannot be within doc.go as Vercel sees that file as an endpoint.
-package handler
+package api
 
 import (
 	"bytes"
@@ -48,7 +48,7 @@ func Index(w http.ResponseWriter, r *http.Request) { // nolint:varnamelen
 	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
 
-	e.GET("/", indexHandler)
+	e.GET("/*", indexHandler)
 	e.ServeHTTP(w, r)
 }
 
