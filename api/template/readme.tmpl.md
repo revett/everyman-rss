@@ -19,11 +19,11 @@ served over HTTPS.
 You can get a feed of all new films for a specific Everyman Cinema:
 
 ```
-https://everyman-rss.vercel.app/films?cinema=broadgate
+https://everyman-rss.revcd.com/films?cinema=broadgate
 ```
 
 See a list of all available cinemas
-[below](https://everyman-rss.vercel.app/#cinemas).
+[below](https://everyman-rss.revcd.com/#cinemas).
 
 ### Caching
 
