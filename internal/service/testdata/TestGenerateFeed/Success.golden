@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Everyman Cinema Winchester - Films</title>
+    <link>https://everymancinema.com/winchester</link>
+    <description>Latest film releases for Everyman Cinema Winchester.</description>
+    <item>
+      <title>Dune</title>
+      <link>https://everymancinema.com/film-info/dune</link>
+      <description>&lt;img src=&#34;http://images.mymovies.net/images/film/cin/stills/531x329/fid20292/1.jpg&#34; /&gt;&lt;br&gt;&lt;br&gt;&lt;p&gt;Oscar nominee Denis Villeneuve...&lt;/p&gt;</description>
+      <guid>39878</guid>
+    </item>
+    <item>
+      <title>No Time To Die</title>
+      <link>https://everymancinema.com/film-info/no-time-to-die</link>
+      <description>&lt;img src=&#34;https://legacylivefilmdbstorage.blob.core.windows.net/evm-circuit-13/4-39309-07352071-74b4-4c2a-876a-644e54733913.jpg&#34; /&gt;&lt;br&gt;&lt;br&gt;&lt;p&gt;Bond has left active service...&lt;/p&gt;</description>
+      <guid>39309</guid>
+    </item>
+  </channel>
+</rss>
