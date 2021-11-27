@@ -1,38 +1,32 @@
 package main
 
 import (
-	"net/http"
-	"time"
-
-	"github.com/gorilla/mux"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	commonLog "github.com/revett/common/log"
-	"github.com/revett/everyman-rss/api/html"
-	"github.com/revett/everyman-rss/api/rss"
+	commonMiddleware "github.com/revett/common/middleware"
+	"github.com/revett/everyman-rss/internal/handler"
 	"github.com/rs/zerolog/log"
 )
 
-const (
-	addr    = "127.0.0.1:5691"
-	timeout = 5
-)
+const port = ":5691"
 
 func main() {
 	log.Logger = commonLog.New()
-	log.Info().Msg(addr)
 
-	r := mux.NewRouter() // nolint:varnamelen
-	r.HandleFunc("/", html.Index)
-	r.HandleFunc("/films", rss.Films)
-	http.Handle("/", r)
+	e := echo.New() // nolint:varnamelen
+	e.Use(commonMiddleware.LoggerUsingZerolog(log.Logger))
+	e.Use(middleware.RequestID())
+	e.Use(middleware.RecoverWithConfig(
+		middleware.RecoverConfig{
+			DisablePrintStack: true,
+		},
+	))
 
-	srv := &http.Server{
-		Handler:      r,
-		Addr:         addr,
-		WriteTimeout: timeout * time.Second,
-		ReadTimeout:  timeout * time.Second,
-	}
+	e.GET("/", handler.Index)
+	e.GET("/films", handler.Films)
 
-	if err := srv.ListenAndServe(); err != nil {
+	if err := e.Start(port); err != nil {
 		log.Fatal().Err(err).Send()
 	}
 }
