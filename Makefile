@@ -7,3 +7,6 @@ lint:
 run:
 	@go build .
 	@./everyman-rss
+
+test:
+	@go test -cover ./...

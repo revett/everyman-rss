@@ -44,8 +44,12 @@ func Index(w http.ResponseWriter, r *http.Request) { // nolint:varnamelen
 
 	e := echo.New() // nolint:varnamelen
 	e.Use(commonMiddleware.LoggerUsingZerolog(log.Logger))
-	e.Use(middleware.Recover())
 	e.Use(middleware.RequestID())
+	e.Use(middleware.RecoverWithConfig(
+		middleware.RecoverConfig{
+			DisablePrintStack: true,
+		},
+	))
 
 	e.GET("/*", indexHandler)
 	e.ServeHTTP(w, r)
