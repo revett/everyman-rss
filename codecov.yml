@@ -1,3 +1,2 @@
-codecov:
-  ignore:
-    - "**/*.gen.go" # Generated code
+ignore:
+  - "**/*.gen.go" # Generated code
