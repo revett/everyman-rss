@@ -19,3 +19,6 @@ TODO.md
 
 # Binary, built with `make run`
 everyman-rss
+
+# Ignore any locally build index.html within build/
+build/index.html

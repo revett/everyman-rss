@@ -5,6 +5,7 @@ linters:
     - exhaustivestruct
     - goerr113
     - golint
+    - gosec
     - interfacer
     - maligned
     - nlreturn

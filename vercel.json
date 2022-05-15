@@ -2,10 +2,6 @@
   "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/api/html"
-    },
-    {
       "source": "/films",
       "destination": "/api/rss/films"
     }
