@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	_ "embed"
-	"fmt"
 	"html/template"
 	"os"
 
@@ -56,8 +55,6 @@ func main() {
 		README: template.HTML(markdown),
 	}
 
-	fmt.Println(templateData.README)
-
 	for _, cinema := range *cinemas.JSON200 {
 		templateData.Cinemas = append(
 			templateData.Cinemas,
@@ -71,7 +68,6 @@ func main() {
 	tmpl, err := template.New("index").Parse(indexTemplate)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to parse local template film")
-
 	}
 
 	var buf bytes.Buffer
