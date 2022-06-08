@@ -8,7 +8,7 @@ require (
 	github.com/gosimple/slug v1.12.0
 	github.com/labstack/echo/v4 v4.7.2
 	github.com/revett/common v0.0.0-20211124204204-8b7f7deba4e8
-	github.com/rs/zerolog v1.26.1
+	github.com/rs/zerolog v1.27.0
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/stretchr/testify v1.7.1
 )
