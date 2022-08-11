@@ -6,7 +6,7 @@ require (
 	github.com/deepmap/oapi-codegen v1.10.1
 	github.com/gorilla/feeds v1.1.1
 	github.com/gosimple/slug v1.12.0
-	github.com/labstack/echo/v4 v4.7.2
+	github.com/labstack/echo/v4 v4.8.0
 	github.com/revett/common v0.0.0-20211124204204-8b7f7deba4e8
 	github.com/rs/zerolog v1.26.1
 	github.com/russross/blackfriday/v2 v2.1.0
