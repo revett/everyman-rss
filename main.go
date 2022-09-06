@@ -14,7 +14,7 @@ const port = ":5691"
 func main() {
 	log.Logger = commonLog.New()
 
-	e := echo.New() // nolint:varnamelen
+	e := echo.New() //nolint:varnamelen
 	e.Use(commonMiddleware.LoggerUsingZerolog(log.Logger))
 	e.Use(middleware.RequestID())
 	e.Use(middleware.RecoverWithConfig(

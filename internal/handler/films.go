@@ -17,7 +17,7 @@ const (
 
 // Films serves an RSS XML feed of the latest film releases from Everyman
 // Cinema.
-func Films(ctx echo.Context) error {
+func Films(ctx echo.Context) error { //nolint:cyclop,funlen
 	cinemaSlug := ctx.QueryParam(cinemaQueryParam)
 	if cinemaSlug == "" {
 		m := fmt.Sprintf("request must have '%s' query param", cinemaQueryParam)
@@ -76,5 +76,12 @@ func Films(ctx echo.Context) error {
 	}
 
 	ctx.Response().Header().Set("Cache-Control", cacheControl)
-	return ctx.Blob(http.StatusOK, "application/xml", []byte(feed))
+
+	if err := ctx.Blob(http.StatusOK, "application/xml", []byte(feed)); err != nil {
+		return fmt.Errorf(
+			"failed to send xml blob content with status code: %w", err,
+		)
+	}
+
+	return nil
 }

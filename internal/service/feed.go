@@ -25,7 +25,7 @@ func GenerateFeed(cinema everyman.Cinema, films []everyman.Film) (string, error)
 
 	rss, err := feed.ToRss()
 	if err != nil {
-		return "", fmt.Errorf("failed to generate rss feed: %w", err) // nolint:wrapcheck
+		return "", fmt.Errorf("failed to generate rss feed: %w", err)
 	}
 
 	return rss, nil

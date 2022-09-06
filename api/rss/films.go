@@ -16,10 +16,10 @@ import (
 
 // Films serves an RSS XML feed of the latest film releases from Everyman
 // Cinema.
-func Films(w http.ResponseWriter, r *http.Request) { // nolint:varnamelen
+func Films(w http.ResponseWriter, r *http.Request) { //nolint:varnamelen
 	log.Logger = commonLog.New()
 
-	e := echo.New() // nolint:varnamelen
+	e := echo.New() //nolint:varnamelen
 	e.Use(commonMiddleware.LoggerUsingZerolog(log.Logger))
 	e.Use(middleware.RequestID())
 	e.Use(middleware.RecoverWithConfig(

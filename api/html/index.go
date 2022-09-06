@@ -15,10 +15,10 @@ import (
 )
 
 // Index serves a simple HTML page explaining the project.
-func Index(w http.ResponseWriter, r *http.Request) { // nolint:varnamelen
+func Index(w http.ResponseWriter, r *http.Request) { //nolint:varnamelen
 	log.Logger = commonLog.New()
 
-	e := echo.New() // nolint:varnamelen
+	e := echo.New() //nolint:varnamelen
 	e.Use(commonMiddleware.LoggerUsingZerolog(log.Logger))
 	e.Use(middleware.RequestID())
 	e.Use(middleware.RecoverWithConfig(

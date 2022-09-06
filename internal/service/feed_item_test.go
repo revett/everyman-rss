@@ -29,7 +29,7 @@ func TestConvertEverymanFilmToFeedItem(t *testing.T) {
 			want: &feeds.Item{
 				Id:          "987",
 				Title:       "Dune",
-				Description: `<img src="http://images.mymovies.net/images/film/cin/stills/531x329/fid20292/1.jpg" /><br><br><p>Oscar nominee Denis Villeneuve...</p>`, // nolint:lll
+				Description: `<img src="http://images.mymovies.net/images/film/cin/stills/531x329/fid20292/1.jpg" /><br><br><p>Oscar nominee Denis Villeneuve...</p>`, //nolint:lll
 				Link: &feeds.Link{
 					Href: "https://everymancinema.com/film-info/dune",
 				},
@@ -38,7 +38,7 @@ func TestConvertEverymanFilmToFeedItem(t *testing.T) {
 	}
 
 	for n, testCase := range tests {
-		tc := testCase // nolint:varnamelen
+		tc := testCase //nolint:varnamelen
 
 		t.Run(n, func(t *testing.T) {
 			t.Parallel()
