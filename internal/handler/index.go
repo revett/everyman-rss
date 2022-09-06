@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	_ "embed"
+	"fmt"
 	"net/http"
 	"text/template"
 
@@ -62,7 +63,11 @@ func Index(ctx echo.Context) error {
 		)
 	}
 
-	return ctx.HTML(http.StatusOK, buf.String())
+	if err := ctx.HTML(http.StatusOK, buf.String()); err != nil {
+		return fmt.Errorf("failed to send html with status code: %w", err)
+	}
+
+	return nil
 }
 
 var (

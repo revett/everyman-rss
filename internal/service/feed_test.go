@@ -37,7 +37,7 @@ func TestGenerateFeed(t *testing.T) {
 					FilmId: 39309,
 					Title:  "No Time To Die",
 					MediaItems: everyman.FilmMediaItems{
-						QuadStill: "https://legacylivefilmdbstorage.blob.core.windows.net/evm-circuit-13/4-39309-07352071-74b4-4c2a-876a-644e54733913.jpg", // nolint:lll
+						QuadStill: "https://legacylivefilmdbstorage.blob.core.windows.net/evm-circuit-13/4-39309-07352071-74b4-4c2a-876a-644e54733913.jpg", //nolint:lll
 					},
 					Synopsis:     "<p>Bond has left active service...</p>",
 					FriendlyName: "no-time-to-die",
@@ -48,7 +48,7 @@ func TestGenerateFeed(t *testing.T) {
 	}
 
 	for n, testCase := range tests {
-		tc := testCase // nolint:varnamelen
+		tc := testCase //nolint:varnamelen
 
 		t.Run(n, func(t *testing.T) {
 			t.Parallel()

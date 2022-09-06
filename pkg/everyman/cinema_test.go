@@ -35,7 +35,7 @@ func TestCinemaSlug(t *testing.T) {
 	}
 
 	for n, testCase := range tests {
-		tc := testCase // nolint:varnamelen
+		tc := testCase //nolint:varnamelen
 
 		t.Run(n, func(t *testing.T) {
 			t.Parallel()
@@ -74,7 +74,7 @@ func TestCinemaURL(t *testing.T) {
 	}
 
 	for n, testCase := range tests {
-		tc := testCase // nolint:varnamelen
+		tc := testCase //nolint:varnamelen
 
 		t.Run(n, func(t *testing.T) {
 			t.Parallel()
