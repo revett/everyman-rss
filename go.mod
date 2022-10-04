@@ -5,7 +5,7 @@ go 1.17
 require (
 	github.com/deepmap/oapi-codegen v1.11.0
 	github.com/gorilla/feeds v1.1.1
-	github.com/gosimple/slug v1.12.0
+	github.com/gosimple/slug v1.13.0
 	github.com/labstack/echo/v4 v4.9.0
 	github.com/revett/common v0.0.0-20220802124857-c7a14ac4f05f
 	github.com/rs/zerolog v1.28.0
