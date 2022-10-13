@@ -6,7 +6,7 @@ require (
 	github.com/deepmap/oapi-codegen v1.11.0
 	github.com/gorilla/feeds v1.1.1
 	github.com/gosimple/slug v1.13.1
-	github.com/labstack/echo/v4 v4.9.0
+	github.com/labstack/echo/v4 v4.9.1
 	github.com/revett/common v0.0.0-20220802124857-c7a14ac4f05f
 	github.com/rs/zerolog v1.28.0
 	github.com/russross/blackfriday/v2 v2.1.0
@@ -18,7 +18,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
-	github.com/labstack/gommon v0.3.1 // indirect
+	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.16 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
