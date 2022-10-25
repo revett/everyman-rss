@@ -10,7 +10,7 @@ require (
 	github.com/revett/common v0.0.0-20220802124857-c7a14ac4f05f
 	github.com/rs/zerolog v1.28.0
 	github.com/russross/blackfriday/v2 v2.1.0
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.1
 )
 
 require (
