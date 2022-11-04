@@ -39,6 +39,25 @@ See a list of all available cinemas
 
 Feeds are cached for 5 minutes.
 
+## Contributing
+
+### OpenAPI Code Generation
+
+Install [deepmap/oapi-codegen](https://github.com/deepmap/oapi-codegen):
+
+```
+go install github.com/deepmap/oapi-codegen/cmd/oapi-codegen@latest
+```
+
+Generate the code:
+
+```
+oapi-codegen -config oapi-codegen.yml everyman.openapi.yml
+```
+
+This is configured within `oapi-codegen.yml` and outputs to
+`pkg/everyman/client.gen.go`.
+
 ## Credits
 
 - Thanks to the [Everyman Cinema](https://www.everymancinema.com) team for the
