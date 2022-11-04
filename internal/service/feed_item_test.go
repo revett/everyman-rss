@@ -38,7 +38,7 @@ func TestConvertEverymanFilmToFeedItem(t *testing.T) {
 	}
 
 	for n, testCase := range tests {
-		tc := testCase //nolint:varnamelen
+		tc := testCase
 
 		t.Run(n, func(t *testing.T) {
 			t.Parallel()
