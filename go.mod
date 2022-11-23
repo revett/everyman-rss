@@ -3,7 +3,7 @@ module github.com/revett/everyman-rss
 go 1.17
 
 require (
-	github.com/deepmap/oapi-codegen v1.12.2
+	github.com/deepmap/oapi-codegen v1.12.3
 	github.com/gorilla/feeds v1.1.1
 	github.com/gosimple/slug v1.13.1
 	github.com/labstack/echo/v4 v4.9.1
